@@ -1,0 +1,8 @@
+# Arquivos gerados pela compilação (não vão para o GitHub)
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+publish/
