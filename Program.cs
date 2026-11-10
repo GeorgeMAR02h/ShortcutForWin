@@ -24,16 +24,33 @@ namespace TaskbarFlyout;
 static class Program
 {
     const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
+    const string RunName = "ShortcutForWin";
+    const string OldRunName = "TaskbarFlyout"; // nome usado nas versões anteriores
+
+    // Se o início automático estava ligado com o nome antigo, passa para o novo e remove o antigo
+    static void MigrateAutoStart()
+    {
+        try
+        {
+            using var k = Registry.CurrentUser.OpenSubKey(RunKey, true);
+            if (k?.GetValue(OldRunName) == null) return;
+            k.DeleteValue(OldRunName, false);
+            k.SetValue(RunName, "\"" + Environment.ProcessPath + "\"");
+        }
+        catch { }
+    }
 
     [STAThread]
     static void Main()
     {
-        using var mutex = new Mutex(true, "TaskbarFlyout.SingleInstance", out bool created);
+        using var mutex = new Mutex(true, "ShortcutForWin.SingleInstance", out bool created);
         if (!created) return;
+        MigrateAutoStart();
 
         var app = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         var store = new Store();
         var flyout = new FlyoutWindow(store);
+        MemoryTrimmer.Schedule(5); // limpa a memória logo depois de iniciar
         using var hook = new MouseHook();
 
         // Botão do meio sobre a barra de tarefas -> descobre qual ícone e mostra o flyout
@@ -65,7 +82,7 @@ static class Program
         var tray = new System.Windows.Forms.NotifyIcon
         {
             Icon = LoadTrayIcon(),
-            Text = "Taskbar Flyout",
+            Text = "Shortcut for Win",
             Visible = true,
             ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip()
         };
@@ -98,15 +115,15 @@ static class Program
     static bool GetAutoStart()
     {
         using var k = Registry.CurrentUser.OpenSubKey(RunKey);
-        return k?.GetValue("TaskbarFlyout") != null;
+        return k?.GetValue(RunName) != null;
     }
 
     static void SetAutoStart(bool on)
     {
         using var k = Registry.CurrentUser.OpenSubKey(RunKey, true);
         if (k == null) return;
-        if (on) k.SetValue("TaskbarFlyout", "\"" + Environment.ProcessPath + "\"");
-        else k.DeleteValue("TaskbarFlyout", false);
+        if (on) k.SetValue(RunName, "\"" + Environment.ProcessPath + "\"");
+        else k.DeleteValue(RunName, false);
     }
 }
 
@@ -141,6 +158,44 @@ static class Exclusions
                 b.Name.Contains(t, StringComparison.OrdinalIgnoreCase))
                 return true;
         return false;
+    }
+}
+
+// ───────────────────────── Devolve memória ao Windows quando o programa está parado ─────────────────────────
+static class MemoryTrimmer
+{
+    [DllImport("kernel32.dll")]
+    static extern bool SetProcessWorkingSetSize(IntPtr process, IntPtr min, IntPtr max);
+
+    static System.Windows.Threading.DispatcherTimer? timer;
+
+    // Agenda a limpeza para alguns segundos depois (reinicia a contagem a cada chamada)
+    public static void Schedule(int seconds = 4)
+    {
+        if (timer == null)
+        {
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += (_, _) => { timer!.Stop(); Trim(); };
+        }
+        timer.Stop();
+        timer.Interval = TimeSpan.FromSeconds(seconds);
+        timer.Start();
+    }
+
+    // Cancela a limpeza (usado enquanto a janelinha está aberta, para não atrapalhar a animação)
+    public static void Cancel() => timer?.Stop();
+
+    static void Trim()
+    {
+        try
+        {
+            System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
+            GC.Collect(2, GCCollectionMode.Forced, true, true);
+            GC.WaitForPendingFinalizers();
+            using var me = Process.GetCurrentProcess();
+            SetProcessWorkingSetSize(me.Handle, (IntPtr)(-1), (IntPtr)(-1));
+        }
+        catch { }
     }
 }
 
@@ -643,6 +698,7 @@ sealed class FlyoutWindow : Window
         if (IsVisible && !dismissing && key == info.Key) { Dismiss(); return; }
 
         dismissToken++;          // cancela um fechamento em andamento
+        MemoryTrimmer.Cancel();
         dismissing = false;
         key = info.Key;
         anchor = info.Bounds;
@@ -709,6 +765,7 @@ sealed class FlyoutWindow : Window
             if (token != dismissToken) return; // foi reaberto no meio do caminho
             dismissing = false;
             Hide();
+            MemoryTrimmer.Schedule(); // janelinha fechada: devolve memória ao Windows
         };
         BeginAnimation(OpacityProperty, fade);
     }
@@ -803,7 +860,7 @@ sealed class FlyoutWindow : Window
     static void Launch(string path)
     {
         try { Process.Start(new ProcessStartInfo(path) { UseShellExecute = true }); }
-        catch (Exception ex) { MessageBox.Show(ex.Message, "Taskbar Flyout"); }
+        catch (Exception ex) { MessageBox.Show(ex.Message, "Shortcut for Win"); }
     }
 
     public static ImageSource? IconFor(string path)

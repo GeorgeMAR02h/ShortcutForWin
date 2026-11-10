@@ -7,11 +7,17 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
-    <AssemblyName>TaskbarFlyout</AssemblyName>
+    <AssemblyName>ShortcutForWin</AssemblyName>
+    <AssemblyTitle>Shortcut for Win</AssemblyTitle>
+    <Product>Shortcut for Win</Product>
+    <Description>Shortcut for Win</Description>
     <RootNamespace>TaskbarFlyout</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <ApplicationIcon>mouse_icon.ico</ApplicationIcon>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <TieredPGO>false</TieredPGO>
   </PropertyGroup>
 
   <ItemGroup>
