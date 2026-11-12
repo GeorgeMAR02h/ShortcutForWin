@@ -12,6 +12,7 @@ Middle-click any icon on the Windows taskbar to open a small flyout with your ow
 - **Follows your Windows theme**: light/dark mode, accent color and transparency settings.
 - Smooth animations: items rise from the taskbar and pop forward on hover.
 - File Explorer keeps the default Windows behavior (middle-click opens a new window). You can exclude other apps too.
+- **Follows the Windows display language** (English, Portuguese, Spanish, French and German; other languages fall back to English).
 - Lives in the system tray, with an option to start with Windows.
 
 ## Requirements
@@ -24,7 +25,7 @@ Middle-click any icon on the Windows taskbar to open a small flyout with your ow
 1. Run `ShortcutForWin.exe`. An icon appears in the system tray.
 2. Middle-click an icon on the taskbar.
 3. Click **+** to pick a program, or drag something into the flyout. Use the pin button to keep the flyout open while dragging.
-4. Right-click a shortcut in the flyout to remove it.
+4. Hover a shortcut and click the **×** to remove it, or right-click it to open the Windows context menu (with an extra **Replace…** option).
 
 ### Excluding apps
 

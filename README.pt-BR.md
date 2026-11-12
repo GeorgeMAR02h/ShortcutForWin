@@ -12,6 +12,7 @@ Clique com o botão do meio em qualquer ícone da barra de tarefas do Windows pa
 - **Segue o tema do Windows**: modo claro/escuro, cor de destaque e transparência.
 - Animações suaves: os itens sobem da barra e "vêm para frente" ao passar o mouse.
 - O Explorador de Arquivos mantém o comportamento padrão do Windows (abre uma nova janela). Dá para excluir outros apps também.
+- **Segue o idioma de exibição do Windows** (inglês, português, espanhol, francês e alemão; outros idiomas usam inglês).
 - Fica na bandeja do sistema, com opção de iniciar com o Windows.
 
 ## Requisitos
@@ -24,7 +25,7 @@ Clique com o botão do meio em qualquer ícone da barra de tarefas do Windows pa
 1. Abra o `ShortcutForWin.exe`. Um ícone aparece na bandeja do sistema.
 2. Clique com o botão do meio em um ícone da barra de tarefas.
 3. Clique em **+** para escolher um programa, ou arraste algo para dentro da janelinha. Use o botão de pin para mantê-la aberta enquanto arrasta.
-4. Clique com o botão direito em um atalho para removê-lo.
+4. Passe o mouse sobre um atalho e clique no **×** para removê-lo, ou clique com o botão direito para abrir o menu de contexto do Windows (com a opção extra **Trocar…**).
 
 ### Excluir apps
 
