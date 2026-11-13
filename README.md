@@ -9,6 +9,7 @@ Middle-click any icon on the Windows taskbar to open a small flyout with your ow
 - **Middle-click** a taskbar icon to open a flyout right above it.
 - Each taskbar icon has its **own group** of shortcuts.
 - Add programs by **dragging and dropping** files, shortcuts or folders, or with the **+** button (searchable list of installed programs).
+- **Drag a shortcut out** of the flyout onto the desktop or any folder to move it there (it leaves the flyout).
 - **Follows your Windows theme**: light/dark mode, accent color and transparency settings.
 - Smooth animations: items rise from the taskbar and pop forward on hover.
 - File Explorer keeps the default Windows behavior (middle-click opens a new window). You can exclude other apps too.

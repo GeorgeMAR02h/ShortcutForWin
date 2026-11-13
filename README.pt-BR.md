@@ -9,6 +9,7 @@ Clique com o botão do meio em qualquer ícone da barra de tarefas do Windows pa
 - **Botão do meio** em um ícone da barra abre a janelinha logo acima dele.
 - Cada ícone da barra tem o seu **próprio grupo** de atalhos.
 - Adicione programas **arrastando e soltando** arquivos, atalhos ou pastas, ou pelo botão **+** (lista de programas instalados com busca).
+- **Arraste um atalho para fora** da janelinha, para a Área de Trabalho ou qualquer pasta, para movê-lo para lá (ele sai da janelinha).
 - **Segue o tema do Windows**: modo claro/escuro, cor de destaque e transparência.
 - Animações suaves: os itens sobem da barra e "vêm para frente" ao passar o mouse.
 - O Explorador de Arquivos mantém o comportamento padrão do Windows (abre uma nova janela). Dá para excluir outros apps também.
